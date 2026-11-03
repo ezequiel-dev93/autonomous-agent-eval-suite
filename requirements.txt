@@ -1,0 +1,11 @@
+# Interfaz Visual Interactiva (Agent Harness & Eval Studio)
+streamlit>=1.38.0
+
+# Tipado Estricto y Dominio
+pydantic>=2.8.0
+
+# Modelo LLM para Agente ReAct y LLM-as-a-Judge (Opcional en Modo Producción)
+google-generativeai>=0.8.0
+
+# Variables de Entorno
+python-dotenv>=1.0.1
