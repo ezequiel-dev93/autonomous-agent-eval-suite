@@ -4,7 +4,7 @@
 [![UI](https://img.shields.io/badge/UI-Streamlit%20Eval%20Studio-red.svg)](https://streamlit.io/)
 [![Architecture](https://img.shields.io/badge/Architecture-Hexagonal-green.svg)](docs/architecture.md)
 [![Quality Gate](https://img.shields.io/badge/Pass%20Rate-100%25%20Verified-success.svg)](tests/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![License](https://img.shields.io/badge/License-Proprietary%20%7C%20All%20Rights%20Reserved-critical.svg)](LICENSE)
 
 Plataforma de ingeniería que fusiona un **Entorno de Ejecución Autónoma para Agentes (Agent Harness con bucle ReAct)** y una **Suite Cuantitativa de Evaluación de IA (AI Evals & Guardrails)** bajo **Arquitectura Hexagonal**.
 
