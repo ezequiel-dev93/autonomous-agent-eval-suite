@@ -16,19 +16,22 @@ Diseñada para ejecutar agentes capaces de razonar paso a paso (`Thought -> Acti
 
 1. **Motor Autónomo ReAct con Cortacircuitos (*Circuit Breaker*):**
    * Ejecución trazable paso a paso (`Thought`, `Tool Call`, `Observation`) con límite configurable de iteraciones (`MAX_REACT_STEPS`) para prevenir bucles infinitos y sobrecostos.
-2. **Sandbox Empresarial de Herramientas Deterministas (`EnterpriseToolSandbox`):**
+2. **Sandbox Empresarial de Herramientas Deterministas + Documentos Multi-Formato (`EnterpriseToolSandbox`):**
+   * `query_uploaded_documents`: Analiza y extrae cláusulas y cifras exactas de documentos subidos por el usuario (**`PDF`, `DOCX`, `CSV`, `JSON`, `HTML`, `MD`, `TXT`**).
    * `query_vehicle_inventory`: Consulta de stock y precios exactos en COP.
    * `calculate_auto_financing`: Amortización matemática francesa exacta sin riesgo de cálculo mental del LLM.
    * `check_ophthalmology_protocol`: Validación de requisitos prequirúrgicos y aranceles clínicos (LASIK / Catarata).
    * `verify_policy_guardrail`: Defensa activa contra *Prompt Injection* y descuentos fuera de política.
-3. **Juez Evaluador en Tiempo Real (`IEvalJudge` / LLM-as-a-Judge):**
-   * **Faithfulness (Detector de Alucinación Numérica):** Cruza todas las cifras de la respuesta final contra las observaciones reales devueltas por el Sandbox. Si el agente inventa un número, bloquea la respuesta (`FAIL`).
+3. **Arquitectura Web-Ready con BYOK (*Bring Your Own Key*) + BYOD:**
+   * El visitante puede ingresar su propia `Gemini API Key` en su sesión privada del navegador para ejecutar tanto el Agente ReAct como el Juez `LLM-as-a-Judge` con **Google Gemini 2.5 Flash**, o usar el **Motor Determinista Instantáneo a $0 costo**.
+4. **Juez Evaluador en Tiempo Real (`IEvalJudge` / LLM-as-a-Judge):**
+   * **Faithfulness (Detector de Alucinación Numérica):** Cruza todas las cifras de la respuesta final contra las observaciones reales devueltas por el Sandbox (incluyendo los documentos subidos por el usuario). Si el agente inventa un número, bloquea la respuesta (`FAIL`).
    * **Tool Selection Accuracy:** Mide si el agente eligió las herramientas óptimas.
    * **Answer Completeness & Relevance:** Verifica cobertura semántica contra expectativas.
    * **Safety & Policy Guardrail:** Certifica resistencia ante ataques de *Red-Teaming*.
-4. **Simulador de Alucinación en 1 Clic (*Red-Team Toggle*):**
+5. **Simulador de Alucinación en 1 Clic (*Red-Team Toggle*):**
    * Incluye un interruptor en la interfaz para inyectar deliberadamente una alucinación en el agente y demostrar en vivo cómo el Quality Gate la detecta y rechaza.
-5. **Suite de Benchmark CI/CD con Exportación de Certificados (`Golden Dataset`):**
+6. **Suite de Benchmark CI/CD con Exportación de Certificados (`Golden Dataset`):**
    * Ejecuta baterías de pruebas automatizadas y exporta el reporte de certificación en Markdown para pipelines de integración continua.
 
 ---
@@ -39,7 +42,9 @@ Diseñada para ejecutar agentes capaces de razonar paso a paso (`Thought -> Acti
 
 ```text
 04-agent-harness-evals/
-├── app.py                                      # 🖥️ Streamlit UI: "Agent Harness & AI Eval Studio"
+├── app.py                                      # 🖥️ Streamlit UI Web-Ready (BYOK + Subida Multi-Formato)
+├── .streamlit/
+│   └── config.toml                             # 🔒 Protección XSRF, límite 10MB y tema ejecutivo
 ├── requirements.txt                            # 📦 Dependencias del proyecto
 ├── .env.example                                # ⚙️ Variables de entorno
 ├── .gitignore                                  # 🛡️ Exclusión de artefactos locales
@@ -54,10 +59,10 @@ Diseñada para ejecutar agentes capaces de razonar paso a paso (`Thought -> Acti
 │   │   │   └── enterprise_sandbox.py           # Caja de herramientas deterministas aisladas
 │   │   ├── planners/
 │   │   │   ├── deterministic_planner.py        # Motor ReAct $0 Offline + Simulador Red-Team
-│   │   │   └── gemini_planner.py               # Motor ReAct con Google Gemini 2.5 Flash
+│   │   │   └── cloud_planner.py                # Motor ReAct Cloud LLM (BYOK)
 │   │   └── judges/
 │   │       ├── deterministic_judge.py          # Auditor matemático anti-alucinación ($0)
-│   │       └── gemini_judge.py                 # Juez híbrido LLM-as-a-Judge con Gemini
+│   │       └── cloud_judge.py                  # Juez híbrido LLM-as-a-Judge Cloud (BYOK)
 │   └── use_cases/                              # Casos de uso de aplicación
 │       ├── run_agent_with_eval.py              # Ejecución ReAct + Auditoría en tiempo real
 │       └── run_benchmark_suite.py              # Ejecución de Golden Dataset CI/CD

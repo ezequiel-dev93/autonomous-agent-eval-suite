@@ -10,8 +10,13 @@ class DeterministicReActPlanner(IAgentPlanner):
     detecta y bloquea respuestas con datos inventados (Red-Teaming).
     """
 
-    def __init__(self, simulate_hallucination: bool = False) -> None:
+    def __init__(
+        self,
+        simulate_hallucination: bool = False,
+        has_uploaded_docs: bool = False,
+    ) -> None:
         self.simulate_hallucination = simulate_hallucination
+        self.has_uploaded_docs = has_uploaded_docs
 
     def decide_next_step(
         self,
@@ -22,6 +27,34 @@ class DeterministicReActPlanner(IAgentPlanner):
         step_num = len(previous_steps) + 1
         lower = task_prompt.lower()
         used_tools = {s.action_tool for s in previous_steps if s.action_tool}
+
+        # Caso 0: Consulta sobre documentos subidos por el usuario (PDF, DOCX, CSV, JSON, MD, TXT)
+        doc_keywords = [
+            "documento",
+            "archivo",
+            "pdf",
+            "subido",
+            "cargado",
+            "contrato",
+            "cláusula",
+            "clausula",
+            "reporte",
+            "sla",
+            "anexo",
+        ]
+        if any(k in lower for k in doc_keywords):
+            if "query_uploaded_documents" not in used_tools:
+                return ReActStep(
+                    step_number=step_num,
+                    thought="El usuario consulta información específica de sus documentos cargados. Invocaré `query_uploaded_documents` para extraer fragmentos y cifras verificables.",
+                    action_tool="query_uploaded_documents",
+                    action_input={"search_query": task_prompt},
+                )
+            return ReActStep(
+                step_number=step_num,
+                thought="Ya extraje la evidencia textual y numérica del documento cargado en el Sandbox. Procedo a sintetizar la respuesta final.",
+                action_tool=None,
+            )
 
         # Caso 1: Detección de ataque / Prompt Injection / Descuento ilegal
         if any(
@@ -88,8 +121,16 @@ class DeterministicReActPlanner(IAgentPlanner):
                 action_tool=None,
             )
 
-        # Caso por defecto: consultar inventario general y políticas
-        if "query_vehicle_inventory" not in used_tools:
+        # Caso por defecto: si hay documentos subidos por el usuario, consultarlos; si no, consultar inventario general
+        if self.has_uploaded_docs and "query_uploaded_documents" not in used_tools:
+            return ReActStep(
+                step_number=step_num,
+                thought="Hay documentos personalizados cargados en la sesión. Invocaré `query_uploaded_documents` para responder con base en los archivos del usuario.",
+                action_tool="query_uploaded_documents",
+                action_input={"search_query": task_prompt},
+            )
+
+        if not self.has_uploaded_docs and "query_vehicle_inventory" not in used_tools:
             return ReActStep(
                 step_number=step_num,
                 thought="Consultaré el catálogo general en `query_vehicle_inventory` para responder con datos verificados.",
