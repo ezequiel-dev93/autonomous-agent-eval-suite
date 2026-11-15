@@ -1,10 +1,13 @@
 # 🤖⚖️ Autonomous Agent Harness & AI Evaluation Suite
 
+[![Live Demo](https://img.shields.io/badge/🌐%20Live%20Demo-Streamlit%20Cloud-FF4B4B.svg?logo=streamlit&logoColor=white)](https://agent-harness-evals-ezequiel.streamlit.app/)
 [![Python](https://img.shields.io/badge/Python-3.12%2B-blue.svg)](https://www.python.org/)
-[![UI](https://img.shields.io/badge/UI-Streamlit%20Eval%20Studio-red.svg)](https://streamlit.io/)
+[![UI](https://img.shields.io/badge/UI-Streamlit%20Eval%20Studio-red.svg)](https://agent-harness-evals-ezequiel.streamlit.app/)
 [![Architecture](https://img.shields.io/badge/Architecture-Hexagonal-green.svg)](docs/architecture.md)
-[![Quality Gate](https://img.shields.io/badge/Pass%20Rate-100%25%20Verified-success.svg)](tests/)
+[![Quality Gate](https://img.shields.io/badge/Tests-9%2F9%20Passing%20(E2E)-success.svg)](tests/)
 [![License](https://img.shields.io/badge/License-Proprietary%20%7C%20All%20Rights%20Reserved-critical.svg)](LICENSE)
+
+> 🚀 **Pruébalo en vivo en tu navegador ($0 costo o con tu propia API Key):** [**https://agent-harness-evals-ezequiel.streamlit.app/**](https://agent-harness-evals-ezequiel.streamlit.app/)
 
 Plataforma de ingeniería que fusiona un **Entorno de Ejecución Autónoma para Agentes (Agent Harness con bucle ReAct)** y una **Suite Cuantitativa de Evaluación de IA (AI Evals & Guardrails)** bajo **Arquitectura Hexagonal**.
 
